@@ -4,8 +4,15 @@
 
 // parsing and serializing PICA+ <-> PICA/JSON
 
-export const picaFieldIdentifier = ([tag, occ]) =>
-  tag + (occ ? "/" + (occ.length === 1 ? "0" + occ : occ) : "")
+export const picaFieldIdentifier = field => {
+  const [ tag, occ ] = Array.isArray(field) ? field : [field.tag, field.occurrence]
+        
+  if ("counter" in field) {
+    return tag + "x" + field.counter
+  } else {
+    return tag + (occ ? "/" + (occ.length === 1 ? "0" + occ : occ) : "")
+  }
+}
 
 export const serializePicaField = field =>
   picaFieldIdentifier(field)

@@ -1,5 +1,5 @@
 import assert from "assert"
-import { serializePica, parsePica, PicaPath, getPPN } from "../src/pica.js"
+import { serializePica, parsePica, PicaPath, getPPN, picaFieldIdentifier } from "../src/pica.js"
 
 describe("Parsing and serializing PICA Plain", () => {
   const parseTests = {
@@ -24,6 +24,12 @@ describe("Utility functions", () => {
     assert.equal(getPPN(parsePica("003@ $0123")), "123")
     assert.equal(getPPN(parsePica("003@ $0123$0456")), "123")
     assert.equal(getPPN(parsePica("001X $a1\n234@/99 $b$$x$$$c0")), null)
+  }),
+  it("picaFieldIdentifier", () => {
+    assert.equal(picaFieldIdentifier(["123A","01"]), "123A/01")
+    assert.equal(picaFieldIdentifier({tag:"023A"}), "023A")
+    assert.equal(picaFieldIdentifier({tag:"023A",occurrence:"02"}), "023A/02")
+    assert.equal(picaFieldIdentifier({tag:"201A",counter:"00"}), "201Ax00")
   })
 })
 
