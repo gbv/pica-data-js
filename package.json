@@ -1,0 +1,42 @@
+{
+  "name": "pica-data",
+  "version": "0.1.0",
+  "description": "EcmaScript utilities to process PICA+ data",
+  "main": "src/pica.js",
+  "type": "module",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "lint": "eslint --fix './{src,test}/*.js'",
+    "test": "rm -rf ./coverage && mocha test/*.js",
+    "release": "npm test && ./build/release.sh $SEMVER",
+    "release:patch": "SEMVER=patch npm run release",
+    "release:minor": "SEMVER=minor npm run release",
+    "release:major": "SEMVER=major npm run release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gbv/pica-data-js.git"
+  },
+  "keywords": [
+    "code4lib",
+    "pica"
+  ],
+  "author": "Jakob Voß",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gbv/pica-data-js/issues"
+  },
+  "homepage": "https://github.com/gbv/pica-data-js#readme",
+  "engines": {
+    "node": ">=14.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.9.0",
+    "eslint-config-gbv": "git+https://github.com/gbv/eslint-config-gbv.git",
+    "mocha": "^8.1.3",
+    "mocha-eslint": "^6.0.0",
+    "pre-commit": "^1.2.2"
+  }
+}

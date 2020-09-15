@@ -1,0 +1,12 @@
+{
+  "env": {
+    "es2020": true,
+    "mocha": true
+  },
+  "extends": [
+    "gbv"
+  ],
+  "parserOptions": {
+    "sourceType": "module"
+  }
+}
