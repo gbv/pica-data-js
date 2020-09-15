@@ -1,7 +1,7 @@
 # pica-data
 
-[![Test and build](https://github.com/gbv/pica-data/workflows/Test%20and%20build/badge.svg)](https://github.com/gbv/pica-data/actions?query=workflow%3A%22Test+and+build%22)
-[![npm release](https://img.shields.io/npm/v/pica-data)](https://www.npmjs.com/package/pica-data)
+[![Test and build](https://github.com/gbv/pica-data-js/workflows/Test%20and%20build/badge.svg)](https://github.com/gbv/pica-data-js/actions?query=workflow%3A%22Test+and+build%22)
+[![npm release](https://img.shields.io/npm/v/pica-data-js)](https://www.npmjs.com/package/pica-data-js)
 
 ## Description
 
