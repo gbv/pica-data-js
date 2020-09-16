@@ -65,3 +65,17 @@ describe("picaFieldSchedule", () => {
   })
 })
 
+const loadJSON = file => JSON.parse(readFileSync("./test/" + file, "utf8"))
+
+describe("serialize Pica3", () => {
+  const schema = loadJSON("schema.json")
+  const pica3tests = loadJSON("pica3tests.json")
+
+  pica3tests.forEach( ({ plain, pica3 }) => {
+    it(plain + " →  " + pica3, () => {
+      const record = parsePica(plain)
+      assert.equal(serializePica3(record, schema), pica3)
+    })
+  })
+
+})

@@ -155,3 +155,28 @@ export const picaFieldSchedule = (schema, field) => {
   return id && schema.fields ? schema.fields[id] : undefined
 }
 
+// experimental: serialize
+export const serializePica3Subfield = (code, value, schedule) => {
+  const { pica3 } = schedule || {}
+  if (pica3 === undefined) return
+  if (pica3.match(/[.]{3}/)) {
+    return pica3.replace("...", value)
+  } else {
+    return pica3 + value
+  }
+}
+
+export const serializePica3Field = (field, schedule) => {
+  var { pica3, subfields } = schedule
+  // TODO: support occurrences and field ranges
+  pica3 += " "
+  for (let i=2; i<field.length; i+=2) {
+    pica3 += serializePica3Subfield(field[i], field[i+1], subfields[field[i]])
+  }
+  return pica3
+}
+
+export const serializePica3 = (record, schema) => {
+  if (!schema || !schema.fields) return
+  return record.map(field => serializePica3Field(field, picaFieldSchedule(schema, field))).join("\n")
+}
