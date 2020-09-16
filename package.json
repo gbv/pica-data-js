@@ -1,6 +1,6 @@
 {
   "name": "pica-data",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "EcmaScript utilities to process PICA+ data",
   "main": "src/pica.js",
   "type": "module",
