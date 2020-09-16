@@ -152,6 +152,6 @@ export const picaFieldScheduleIdentifier = (schema, field) => {
 
 export const picaFieldSchedule = (schema, field) => {
   const id = picaFieldScheduleIdentifier(schema, field)
-  return id ? schema.fields[id] : undefined
+  return id && schema.fields ? schema.fields[id] : undefined
 }
 

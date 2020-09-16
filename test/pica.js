@@ -1,5 +1,6 @@
 import assert from "assert"
-import { serializePica, parsePica, PicaPath, getPPN, picaFieldIdentifier } from "../src/pica.js"
+import { serializePica, serializePica3, parsePica, PicaPath, getPPN, picaFieldIdentifier, picaFieldSchedule } from "../src/pica.js"
+import { readFileSync } from "fs"
 
 describe("Parsing and serializing PICA Plain", () => {
   const parseTests = {
@@ -56,3 +57,11 @@ describe("PicaPath", () => {
     }
   })
 })
+
+describe("picaFieldSchedule", () => {
+  it("can handle missing arguments", () => {
+    assert.equal(picaFieldSchedule(null, null), null)
+    assert.equal(picaFieldSchedule({}, ["003@"]), null)
+  })
+})
+
