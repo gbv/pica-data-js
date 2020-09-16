@@ -1,5 +1,5 @@
 import assert from "assert"
-import { serializePica, serializePica3, parsePica, PicaPath, getPPN, picaFieldIdentifier, picaFieldSchedule } from "../src/pica.js"
+import { serializePica, serializePica3, parsePica, PicaPath, getPPN, picaFieldIdentifier, picaFieldSchedule, picaFieldScheduleIdentifier } from "../src/pica.js"
 import { readFileSync } from "fs"
 
 describe("Parsing and serializing PICA Plain", () => {
@@ -62,6 +62,14 @@ describe("picaFieldSchedule", () => {
   it("can handle missing arguments", () => {
     assert.equal(picaFieldSchedule(null, null), null)
     assert.equal(picaFieldSchedule({}, ["003@"]), null)
+  })
+})
+
+describe("picaFieldScheduleIdentifier", () => {
+  it("filters undefined field", () => {
+    const schema = {fields:{}}
+    const field = ["003@",null]
+    assert.equal(picaFieldScheduleIdentifier(schema, field), null)
   })
 })
 

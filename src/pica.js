@@ -138,7 +138,9 @@ export const picaFieldScheduleIdentifier = (schema, field) => {
   const id = picaFieldIdentifier([tag, occ])
   const fields = schema.fields || {}
 
-  if (!(id in fields) && occ) {
+  if (id in fields) {
+    return id
+  } else if (occ) {
     // occurrence may be in a range
     occ = Number(occ)
     return Object.keys(fields).find(key => {
@@ -146,8 +148,6 @@ export const picaFieldScheduleIdentifier = (schema, field) => {
       return t === tag && to && occ <= Number(to) && occ >= Number(from)
     })
   }
-
-  return id
 }
 
 export const picaFieldSchedule = (schema, field) => {
@@ -179,4 +179,8 @@ export const serializePica3Field = (field, schedule) => {
 export const serializePica3 = (record, schema) => {
   if (!schema || !schema.fields) return
   return record.map(field => serializePica3Field(field, picaFieldSchedule(schema, field))).join("\n")
+}
+
+export const reduceRecord = (record, schema) => {
+  return record.filter(field => picaFieldScheduleIdentifier(schema, field))
 }
