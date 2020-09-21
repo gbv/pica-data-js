@@ -36,23 +36,27 @@ describe("Utility functions", () => {
 
 describe("PicaPath", () => {
   const pathTests = {
-    "003@": { tag: /^003@$/, occ: null, sf: null },
-    "003@$0": { tag: /^003@$/, occ: null, subfieldString: "0"},
+    "003@": { tagString: "003@" },
+    "003@$0": { tagString: "003@", subfieldString: "0"},
     "045Q[01-09]$a": {
-      tag: /^045Q$/, occ: "01,09",
+      toString: "045Q/01-09$a",
+      tagString: "045Q",
       startOccurrence: "01",
       endOccurrence: "09",
       occurrenceString: "01-09",
       subfieldString: "a",
     },
-    "045G$a": { tag: /^045G$/, occ: null, subfieldString: "a"},
+    "045G$a": { tagString: "045G", subfieldString: "a"},
   }
 
   it("stringify path expressions", () => {
     for (const [expr, expect] of Object.entries(pathTests)) {
       const path = new PicaPath(expr)
-      for (let key in expect) {
-        assert.equal(String(path[key]), String(expect[key]))
+      if (!("toString" in expect)) {
+        assert.equal(path.toString(), expr)
+      }
+      for (let accessor in expect) {
+        assert.equal(path[accessor](), expect[accessor])
       }
     }
   })

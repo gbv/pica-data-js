@@ -60,35 +60,35 @@ export class PicaPath {
     this.sf  = match[7] ? new RegExp("^["+match[7]+"]$") : null
   }
 
-  get tagString() {
+  tagString() {
     return this.tag.source.substring(1, this.tag.source.length-1)
   }
 
-  get fieldIdentifier() {
-    return this.tagString + (this.occ ? "/" + this.occurrenceString : "")
+  fieldIdentifier() {
+    return this.tagString() + (this.occ ? "/" + this.occurrenceString() : "")
   }
 
-  get startOccurrence() {
+  startOccurrence() {
     return Array.isArray(this.occ) ? this.occ[0] : null
   }
 
-  get endOccurrence() {
+  endOccurrence() {
     return Array.isArray(this.occ) ? this.occ[1] : null
   }
 
-  get occurrenceString() {
+  occurrenceString() {
     if (Array.isArray(this.occ)) return this.occ.join("-")
     return this.occf ? this.occ.source.substr(1,this.occ.source.length-1) : ""
   }
 
-  get subfieldString() {
+  subfieldString() {
     const source = this.sf ? this.sf.source : ""
     return source.substring(2,source.length-2)
   }
 
-  get toString() {
-    return this.fieldIdentifier
-            + (this.sf ? "$" + this.subfieldString : "")
+  toString() {
+    return this.fieldIdentifier()
+            + (this.sf ? "$" + this.subfieldString() : "")
   }
 
   matchField(field) {
