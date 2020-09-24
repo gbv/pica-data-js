@@ -1,6 +1,6 @@
 import assert from "assert"
-import { serializePica, serializePica3, parsePica, PicaPath, getPPN, picaFieldIdentifier, picaFieldSchedule, picaFieldScheduleIdentifier } from "../src/pica.js"
-import { readFileSync } from "fs"
+import { serializePica, serializePica3, parsePica, getPPN, picaFieldIdentifier } from "../src/pica.js"
+import { loadJSON } from "./utils.js"
 
 describe("Parsing and serializing PICA Plain", () => {
   const parseTests = {
@@ -31,57 +31,13 @@ describe("Utility functions", () => {
     assert.equal(picaFieldIdentifier({tag:"023A"}), "023A")
     assert.equal(picaFieldIdentifier({tag:"023A",occurrence:"02"}), "023A/02")
     assert.equal(picaFieldIdentifier({tag:"201A",counter:"00"}), "201Ax00")
+    assert.equal(picaFieldIdentifier(["201A","123","x","00"]), "201Ax00/123")
   })
 })
-
-describe("PicaPath", () => {
-  const pathTests = {
-    "003@": { tagString: "003@" },
-    "003@$0": { tagString: "003@", subfieldString: "0"},
-    "045Q[01-09]$a": {
-      toString: "045Q/01-09$a",
-      tagString: "045Q",
-      startOccurrence: "01",
-      endOccurrence: "09",
-      occurrenceString: "01-09",
-      subfieldString: "a",
-    },
-    "045G$a": { tagString: "045G", subfieldString: "a"},
-  }
-
-  it("stringify path expressions", () => {
-    for (const [expr, expect] of Object.entries(pathTests)) {
-      const path = new PicaPath(expr)
-      if (!("toString" in expect)) {
-        assert.equal(path.toString(), expr)
-      }
-      for (let accessor in expect) {
-        assert.equal(path[accessor](), expect[accessor])
-      }
-    }
-  })
-})
-
-describe("picaFieldSchedule", () => {
-  it("can handle missing arguments", () => {
-    assert.equal(picaFieldSchedule(null, null), null)
-    assert.equal(picaFieldSchedule({}, ["003@"]), null)
-  })
-})
-
-describe("picaFieldScheduleIdentifier", () => {
-  it("filters undefined field", () => {
-    const schema = {fields:{}}
-    const field = ["003@",null]
-    assert.equal(picaFieldScheduleIdentifier(schema, field), null)
-  })
-})
-
-const loadJSON = file => JSON.parse(readFileSync("./test/" + file, "utf8"))
 
 describe("serialize Pica3", () => {
-  const schema = loadJSON("schema.json")
-  const pica3tests = loadJSON("pica3tests.json")
+  const schema = loadJSON("schema")
+  const pica3tests = loadJSON("pica3tests")
 
   pica3tests.forEach( ({ plain, pica3 }) => {
     it(plain + " →  " + pica3, () => {
