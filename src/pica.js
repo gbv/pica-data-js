@@ -8,9 +8,7 @@ export const picaFieldIdentifier = field => {
   if (typeof field !== "object") return
 
   const [tag, occ] = Array.isArray(field) ? field : [ field.tag, field.occurrence ]
-  const counter = Array.isArray(field) && tag[0] === "2" 
-    ? subfieldValue(field, "x")
-    : field.counter
+  const counter = Array.isArray(field) ? null : field.counter
 
   return tag 
     + (counter ? "x" + counter : "")
@@ -79,7 +77,7 @@ export const picaFieldScheduleIdentifier = (schema, field) => {
     counter = subfieldValue(field, "x")
   }
     
-  const id = picaFieldIdentifier(counter ? [tag, occ, "x", counter] : [tag, occ])
+  const id = picaFieldIdentifier(counter ? {tag, occurrence: occ, counter} : [tag, occ])
   const fields = schema.fields || {}
 
   if (id in fields) {

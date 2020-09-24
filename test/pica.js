@@ -31,7 +31,7 @@ describe("Utility functions", () => {
     assert.equal(picaFieldIdentifier({tag:"023A"}), "023A")
     assert.equal(picaFieldIdentifier({tag:"023A",occurrence:"02"}), "023A/02")
     assert.equal(picaFieldIdentifier({tag:"201A",counter:"00"}), "201Ax00")
-    assert.equal(picaFieldIdentifier(["201A","123","x","00"]), "201Ax00/123")
+    assert.equal(picaFieldIdentifier(["201A","123","x","00"]), "201A/123")
   })
 })
 
