@@ -7,7 +7,7 @@
 
 This EcmaScript Module contains utility functions to process [PICA+] data:
 
-[PICA+]: https://format.gbv.de/pica/plus
+[PICA+]: https://format.gbv.de/pica
 
 * Parsing
   * function `parsePica` to parse PICA Plain syntax into a PICA record
