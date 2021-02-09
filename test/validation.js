@@ -1,5 +1,5 @@
 import assert from "assert"
-import { picaFieldSchedule, picaFieldScheduleIdentifier, serializePicaField } from "../src/pica.js"
+import { picaFieldSchedule, picaFieldScheduleIdentifier, serializePicaField, isDbkey, isPPN, ppnChecksum } from "../src/pica.js"
 import { loadJSON } from "./utils.js"
 
 const schema = loadJSON("schema")
@@ -30,4 +30,31 @@ describe("picaFieldScheduleIdentifier", () => {
       assert.equal(picaFieldScheduleIdentifier(schema, field), id)
     })
   }
+})
+
+describe("isDbkey", () => {
+  it("detects invalid dbkey", () => {
+    for (let dbkey of [null, "", "a-", "-a","9"]) {
+      assert.ok(!isDbkey(dbkey))
+    }
+  })
+  it("detects valid dbkey", () => {
+    for (let dbkey of ["ab","a9-1", "ab-b1e-ef"]) {
+      assert.ok(isDbkey(dbkey))
+    }
+  })
+})
+
+describe("isPPN", () => {
+  it("detects valid PPN with checksum", () => {
+    for (let ppn of ["043107419","1747808938","271389869","95980479X","741769247"]) {
+      assert.ok(isPPN(ppn))
+      assert.equal(ppnChecksum(ppn.slice(0,-1)), ppn.slice(-1))
+    }
+  })
+  it("detects invalid ppn", () => {
+    for (let ppn of [null, "ab123", "", "1","1X","959804790"]) {
+      assert.ok(!isPPN(ppn))
+    }
+  })
 })

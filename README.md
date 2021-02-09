@@ -25,6 +25,9 @@ This EcmaScript Module contains utility functions to process [PICA+] data:
 * Validation
   * function `picaFieldSchedule` to look up a field schedule for a given field in an Avram schema
   * function `picaFieldScheduleIdentifier` to look up the field identifier of a field in an Avram schema
+  * function `isDbkey` to check whether a string looks like a database key
+  * function `isPPN` to check whether a string looks like a valid PPN (including checksum)
+  * function `ppnChecksum` to calculate the checksum of a PPN
 
 ## LICENSE
 

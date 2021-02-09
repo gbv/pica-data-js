@@ -133,3 +133,18 @@ export const serializePica3 = (record, schema) => {
 export const reduceRecord = (record, schema) => {
   return record.filter(field => picaFieldScheduleIdentifier(schema, field))
 }
+
+export const ppnChecksum = ppn => {
+  if (ppn && ppn.match("^[0-9]+$")) {
+    const length = ppn.length
+    let sum = 0
+    for (let i=0; i<length; i++) {
+      sum += ppn[i] * (length-i+1)
+    }
+    sum = (11 - (sum % 11)) % 11
+    return sum === 10 ? "X" : sum
+  }
+}
+
+export const isDbkey = dbkey => dbkey && dbkey.match("^[a-z][a-z0-9-]*[a-z0-9]$")
+export const isPPN = ppn => ppn && ppn.match("^[0-9][0-9]+X?$") && ppn.slice(-1) == ppnChecksum(ppn.slice(0,-1))
