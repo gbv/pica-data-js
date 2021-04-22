@@ -19,8 +19,20 @@ This EcmaScript Module contains utility functions to process [PICA+] data:
   * function `picaFieldIdentifier` to generate a field identifier from a field or from an Avram field schedule
 
 * Access
-  * class `PicaPath` to work with PICA Path expressions
   * function `getPPN` to extract the PPN of a record
+  * class `PicaPath` to work with PICA Path expressions
+    * method `fieldIdentifier` to get the path's field identifier (tag and optional occurrence)
+    * method `tagString` to get the path's PICA tag, without occurrence
+    * method `occurrenceString` to get the path's occurrence (or an empty string)
+    * method `startOccurrence` to get the path's start occurrence (or an empty string)
+    * method `endOccurrence` to get the path's end occurrence (or an empty string)
+    * method `subfieldString` to get the path's subfield identifier (or an empty string)
+    * method `toString` to get field identifier and subfield identifier combined
+    * method `matchField(field)` to check whether a PICA field matches the path
+    * method `getFields(record)` to filter all matching PICA fields 
+    * method `extractSubfields(field)` to filter out all matching subfield values
+    * method `getValues(record)` to get a (possibly empty) array of matching subfield values
+    * method `getUniqueValues(record)` same as `getValues` but unique values only
 
 * Validation
   * function `picaFieldSchedule` to look up a field schedule for a given field in an Avram schema
