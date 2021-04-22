@@ -33,6 +33,12 @@ describe("Parsing and serializing PICA Plain", () => {
       "? 123A $xy": [["123A",null,"x","y","?"]],
     })
     assert.equal(serializePica([["123A",null,"x","y",null]]), "  123A $xy")
+
+    assert.deepEqual(parsePica("  123A $xy", { annotated: false }), [])
+    assert.deepEqual(parsePica("123A $xy", { annotated: true }), [])
+
+    assert.deepEqual(serializePica([["123A",null,"x","y"," "]], { annotated: false }), "123A $xy")
+    assert.deepEqual(serializePica([["123A",null,"x","y"]], { annotated: true }), "  123A $xy")
   })
 })
 

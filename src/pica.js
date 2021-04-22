@@ -21,14 +21,21 @@ function subfieldValue(field, code) {
   }
 }
 
-export const serializePicaField = field => {
+export const serializePicaField = (field, options) => {
+  const annotated = (options||{}).annotated
+
   var annotation = ""
   var subfields
 
   if (field.length % 2 && field.length > 2) {
-    annotation = (field.slice(-1)[0] || " ") + " "
+    if (annotated !== false) {
+      annotation = (field.slice(-1)[0] || " ") + " "
+    }
     subfields  = field.slice(2,-1)
   } else {
+    if (annotated === true) {
+      annotation = "  "
+    }
     subfields = field.slice(2)
   }
 
@@ -36,8 +43,8 @@ export const serializePicaField = field => {
         subfields.map((s,i) => i % 2 ? s.replace(/\$/g,"$$$") : "$" + s).join("")
 }
 
-export const serializePica = pica =>
-  pica.map(serializePicaField).join("\n")
+export const serializePica = (pica, options) =>
+  pica.map(field => serializePicaField(field, options)).join("\n")
 
 const picaSubfieldPattern = /\$([A-Za-z0-9])((?:[^$]+|\$\$)+)/g
 const picaLinePattern = new RegExp([
@@ -47,9 +54,10 @@ const picaLinePattern = new RegExp([
   /((\$([A-Za-z0-9])([^$]|\$\$)+)+)$/,
 ].map(r => r.source).join(""))
 
-export const parsePicaLine = line => {
+export const parsePicaLine = (line, options) => {
   const match = line.match(picaLinePattern)
   if (match) {
+    const annotated  = (options || {}).annotated
     const annotation = match[1]
     const occurrence = match[4]
     const subfields = match[5]
@@ -57,14 +65,19 @@ export const parsePicaLine = line => {
     for (let m of subfields.matchAll(picaSubfieldPattern)) {
       field.push(m[1], m[2].replace(/\$\$/g, "$"))
     }
-    if (annotation) { //annotation.length) {
-      field.push(annotation[0]) //match[1])
+    if (annotation) {
+      if (annotated === false) {
+        return
+      }
+      field.push(annotation[0])
+    } else if (annotated) {
+      return
     }
     return field
   }
 }
 
-export const parsePica = text => text.split(/\n/).map(parsePicaLine).filter(Boolean)
+export const parsePica = (text, options) => text.split(/\n/).map(line => parsePicaLine(line, options)).filter(Boolean)
 
 import { PicaPath } from "./picapath.js"
 export { PicaPath } from "./picapath.js"

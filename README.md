@@ -5,9 +5,9 @@
 
 ## Description
 
-This EcmaScript Module contains utility functions to process [PICA+] data:
+This EcmaScript Module contains utility functions to process [PICA+ data](https://format.gbv.de/pica) (in particular [PICA Plain](http://format.gbv.de/pica/plain) and the structure of [PICA JSON](http://format.gbv.de/pica/json)).
 
-[PICA+]: https://format.gbv.de/pica
+Annotated PICA Plain is supported by default. It can be enforced or disabled on parsing and on serializing by setting option `annotated` to `true` or `false`.
 
 * Parsing
   * function `parsePica` to parse PICA Plain syntax into a PICA record
