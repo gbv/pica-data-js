@@ -3,20 +3,36 @@ import { serializePica, serializePica3, parsePica, getPPN, picaFieldIdentifier }
 import { loadJSON } from "./utils.js"
 
 describe("Parsing and serializing PICA Plain", () => {
-  const parseTests = {
-    "003@ $0123": [ [ "003@", null, "0", "123" ] ],
-    "001X $a1\n234@/99 $b$$x$$$c0": [
-      ["001X", null, "a", "1" ],
-      ["234@", "99", "b", "$x$", "c", "0" ],
-    ],
+  const parseTests = tests => {
+    for (let pp in tests) {
+      const pica = parsePica(pp)
+      assert.deepEqual(pica, tests[pp])
+      assert.equal(serializePica(pica), pp)
+    }
   }
 
   it("parses and serializes", () => {
-    for (let pp in parseTests) {
-      const pica = parsePica(pp)
-      assert.deepEqual(pica, parseTests[pp])
-      assert.equal(serializePica(pica), pp)
-    }
+    parseTests({
+      "003@ $0123": [ [ "003@", null, "0", "123" ] ],
+      "001X $a1\n234@/99 $b$$x$$$c0": [
+        ["001X", null, "a", "1" ],
+        ["234@", "99", "b", "$x$", "c", "0" ],
+      ],
+    })
+  })
+
+  it("does not support empty (sub)fields", () => {
+    assert.deepEqual(parsePica("099X $ab$"), [])
+    assert.deepEqual(parsePica("099X $"), [])
+    assert.deepEqual(parsePica("099X"), [])
+  })
+    
+  it("supports parsing and serializing annotated PICA", () => {
+    parseTests({
+      "  123A $xy": [["123A",null,"x","y"," "]],
+      "? 123A $xy": [["123A",null,"x","y","?"]],
+    })
+    assert.equal(serializePica([["123A",null,"x","y",null]]), "  123A $xy")
   })
 })
 

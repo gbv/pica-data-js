@@ -21,17 +21,27 @@ function subfieldValue(field, code) {
   }
 }
 
-export const serializePicaField = field =>
-  picaFieldIdentifier(field)
-    + " "
-    + field.slice(2).map((s,i) => i % 2 ? s.replace(/\$/g,"$$$") : "$" + s).join("")
+export const serializePicaField = field => {
+  var annotation = ""
+  var subfields
+
+  if (field.length % 2 && field.length > 2) {
+    annotation = (field.slice(-1)[0] || " ") + " "
+    subfields  = field.slice(2,-1)
+  } else {
+    subfields = field.slice(2)
+  }
+
+  return annotation + picaFieldIdentifier(field) + " " +
+        subfields.map((s,i) => i % 2 ? s.replace(/\$/g,"$$$") : "$" + s).join("")
+}
 
 export const serializePica = pica =>
   pica.map(serializePicaField).join("\n")
 
 const picaSubfieldPattern = /\$([A-Za-z0-9])((?:[^$]+|\$\$)+)/g
 const picaLinePattern = new RegExp([
-  /^([012][0-9][0-9][A-Z@])/,
+  /^([^A-Za-z0-9]\s*)?([012][0-9][0-9][A-Z@])/,
   /(\/([0-9]{2,3}))?/,
   /\s*/,
   /((\$([A-Za-z0-9])([^$]|\$\$)+)+)$/,
@@ -40,12 +50,15 @@ const picaLinePattern = new RegExp([
 export const parsePicaLine = line => {
   const match = line.match(picaLinePattern)
   if (match) {
-    const tag = match[1]
-    const occurrence = match[3]
-    const subfields = match[4]
-    const field = [ tag, occurrence ]
+    const annotation = match[1]
+    const occurrence = match[4]
+    const subfields = match[5]
+    const field = [ match[2], occurrence ]
     for (let m of subfields.matchAll(picaSubfieldPattern)) {
       field.push(m[1], m[2].replace(/\$\$/g, "$"))
+    }
+    if (annotation) { //annotation.length) {
+      field.push(annotation[0]) //match[1])
     }
     return field
   }
