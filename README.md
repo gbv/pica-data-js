@@ -3,7 +3,20 @@
 [![Test and build](https://github.com/gbv/pica-data-js/workflows/Test/badge.svg)](https://github.com/gbv/pica-data-js/actions?query=workflow%3A%22Test%22)
 [![npm release](https://img.shields.io/npm/v/pica-data)](https://www.npmjs.com/package/pica-data)
 
-## Description
+## Table of Contents
+
+- [Install](#install)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Install
+
+Install the module with `npm install pica-data`.
+
+Requires at least Node v14.8.0.
+
+## Usage
 
 This EcmaScript Module contains utility functions to process [PICA+ data](https://format.gbv.de/pica) (in particular [PICA Plain](http://format.gbv.de/pica/plain) and the structure of [PICA JSON](http://format.gbv.de/pica/json)).
 
@@ -41,6 +54,16 @@ Annotated PICA Plain is supported by default. It can be enforced or disabled on 
   * function `isPPN` to check whether a string looks like a valid PPN (including checksum)
   * function `ppnChecksum` to calculate the checksum of a PPN
 
-## LICENSE
+## Contributing
 
-[MIT License](LICENSE)
+PRs accepted against the `dev` branch. Never directly work on the main branch.
+
+For releases (maintainers only) make changes on `dev` and then run the release script:
+
+```bash
+npm run release:patch # or minor or major
+```
+
+## License
+
+[MIT License](LICENSE) Verbundzentrale des GBV (VZG)
