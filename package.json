@@ -54,5 +54,8 @@
     "mocha-eslint": "^7.0.0",
     "pre-commit": "^1.2.2",
     "standard-readme": "^2.0.4"
+  },
+  "dependencies": {
+    "split2": "^4.1.0"
   }
 }
