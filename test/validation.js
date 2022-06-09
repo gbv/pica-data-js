@@ -1,5 +1,5 @@
 import assert from "assert"
-import { picaFieldSchedule, picaFieldScheduleIdentifier, serializePicaField, isDbkey, isPPN, ppnChecksum } from "../src/pica.js"
+import { picaFieldSchedule, picaFieldScheduleIdentifier, serializePicaField, isDbkey, isPPN, ppnChecksum } from "../lib/pica.js"
 import { loadJSON } from "./utils.js"
 
 const schema = loadJSON("schema")

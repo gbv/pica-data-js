@@ -1,5 +1,5 @@
 import assert from "assert"
-import { PicaPath } from "../src/pica.js"
+import { PicaPath } from "../lib/pica.js"
 
 describe("PicaPath", () => {
   const pathTests = {

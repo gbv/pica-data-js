@@ -1,5 +1,5 @@
 import assert from "assert"
-import { serializePica, serializePica3, parsePica, getPPN, picaFieldIdentifier } from "../src/pica.js"
+import { serializePica, serializePica3, parsePica, getPPN, picaFieldIdentifier } from "../lib/pica.js"
 import { loadJSON } from "./utils.js"
 
 describe("Parsing and serializing PICA Plain", () => {
@@ -13,15 +13,20 @@ describe("Parsing and serializing PICA Plain", () => {
 
   it("parses and serializes", () => {
     parseTests({
-      "003@ $0123": [ [ "003@", null, "0", "123" ] ],
+      "031N $d$e1$f": [ [ "031N", "", "d", "", "e", "1", "f", "" ] ],
+      "003@ $0123": [ [ "003@", "", "0", "123" ] ],
       "001X $a1\n234@/99 $b$$x$$$c0": [
-        ["001X", null, "a", "1" ],
+        ["001X", "", "a", "1" ],
         ["234@", "99", "b", "$x$", "c", "0" ],
       ],
     })
   })
 
-  it("does not support empty (sub)fields", () => {
+  it("normalized occurrence zero", () => {
+    assert.deepEqual(parsePica("012X/00 $a"), [["012X", "", "a", ""]])
+  })
+
+  it("does not support missing subfield codes", () => {
     assert.deepEqual(parsePica("099X $ab$"), [])
     assert.deepEqual(parsePica("099X $"), [])
     assert.deepEqual(parsePica("099X"), [])
@@ -29,16 +34,16 @@ describe("Parsing and serializing PICA Plain", () => {
     
   it("supports parsing and serializing annotated PICA", () => {
     parseTests({
-      "  123A $xy": [["123A",null,"x","y"," "]],
-      "? 123A $xy": [["123A",null,"x","y","?"]],
+      "  123A $xy": [["123A","","x","y"," "]],
+      "? 123A $xy": [["123A","","x","y","?"]],
     })
-    assert.equal(serializePica([["123A",null,"x","y",null]]), "  123A $xy")
+    assert.equal(serializePica([["123A","","x","y",null]]), "  123A $xy")
 
     assert.deepEqual(parsePica("  123A $xy", { annotated: false }), [])
     assert.deepEqual(parsePica("123A $xy", { annotated: true }), [])
 
-    assert.deepEqual(serializePica([["123A",null,"x","y"," "]], { annotated: false }), "123A $xy")
-    assert.deepEqual(serializePica([["123A",null,"x","y"]], { annotated: true }), "  123A $xy")
+    assert.deepEqual(serializePica([["123A","","x","y"," "]], { annotated: false }), "123A $xy")
+    assert.deepEqual(serializePica([["123A","","x","y"]], { annotated: true }), "  123A $xy")
   })
 })
 
