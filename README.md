@@ -26,14 +26,18 @@ Annotated PICA Plain is supported by default. It can be enforced or disabled on 
 
 * function `parsePica` to parse PICA Plain syntax into a PICA record
 * function `parsePicaLine` to parse a line of PICA Plain syntax into a PICA field
-* stream parser function `parseStream` to parse PICA Plain syntax from a stream
+* stream parser functions `parseStream` (stream) and `parseAll` (promise) to parse PICA Plain syntax from a stream
 
 ~~~js
-import { parseStream } from "pica-data"
+import { parseStream, parseAll } from "pica-data"
 
 parseStream(process.stdin, "plain")
   .on("data", record => console.log(record))
   .on("error", ({message, line}) => console.error(`${message} on line ${line}`))
+
+parseAll(process.stdin, "plain")
+  .then(records => console.log(records))
+  .catch(e => console.error(`${e.message} on line ${e.line}`))
 ~~~
 
 ### Serializing
