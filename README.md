@@ -24,9 +24,7 @@ Annotated PICA Plain is supported by default. It can be enforced or disabled on 
 
 ### Parsing
 
-* function `parsePica` to parse PICA Plain syntax into a PICA record
-* function `parsePicaLine` to parse a line of PICA Plain syntax into a PICA field
-* stream parser functions `parseStream` (stream) and `parseAll` (promise) to parse PICA Plain syntax from a stream
+PICA in serialization formats [PICA Plain](https://format.gbv.de/pica/plain), [PICA Normalized](https://format.gbv.de/pica/normalized) and [Annotated PICA](https://format.gbv.de/pica/plain) from readable streams is supported by parser functions `parseStream` (returns a stream of records) and `parseAll` (returns a promise resolving in an array of records).
 
 ~~~js
 import { parseStream, parseAll } from "pica-data"
@@ -39,6 +37,11 @@ parseAll(process.stdin, "plain")
   .then(records => console.log(records))
   .catch(e => console.error(`${e.message} on line ${e.line}`))
 ~~~
+
+In addition there are two legacy functions that both ignore parsing errors:
+
+* function `parsePica` to parse PICA Plain syntax into a PICA record
+* function `parsePicaLine` to parse a line of PICA Plain syntax into a PICA field
 
 ### Serializing
 

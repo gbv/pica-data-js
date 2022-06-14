@@ -3,9 +3,9 @@ import { serializePica, serializePica3, parsePica, getPPN, picaFieldIdentifier }
 import { loadJSON } from "./utils.js"
 
 describe("Parsing and serializing PICA Plain", () => {
-  const parseTests = tests => {
+  const parseTests = (tests, options) => {
     for (let pp in tests) {
-      const pica = parsePica(pp)
+      const pica = parsePica(pp, options)
       assert.deepEqual(pica, tests[pp])
       assert.equal(serializePica(pica), pp)
     }
@@ -36,7 +36,7 @@ describe("Parsing and serializing PICA Plain", () => {
     parseTests({
       "  123A $xy": [["123A","","x","y"," "]],
       "? 123A $xy": [["123A","","x","y","?"]],
-    })
+    }, { annotated: true })
     assert.equal(serializePica([["123A","","x","y",null]]), "  123A $xy")
 
     assert.deepEqual(parsePica("  123A $xy", { annotated: false }), [])
