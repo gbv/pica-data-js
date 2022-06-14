@@ -31,7 +31,7 @@ Annotated PICA Plain is supported by default. It can be enforced or disabled on 
 ~~~js
 import { parseStream, parseAll } from "pica-data"
 
-parseStream(process.stdin, "plain")
+parseStream(process.stdin, { format: "plain" })
   .on("data", record => console.log(record))
   .on("error", ({message, line}) => console.error(`${message} on line ${line}`))
 
