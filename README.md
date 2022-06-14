@@ -14,7 +14,7 @@
 
 Install the module with `npm install pica-data`.
 
-Requires at least Node v14.8.0.
+Requires at least Node v16.
 
 ## Usage
 
