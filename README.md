@@ -18,9 +18,12 @@ Requires at least Node v16.
 
 ## Usage
 
-This EcmaScript Module contains utility functions to process [PICA+ data](https://format.gbv.de/pica) (in particular [PICA Plain](http://format.gbv.de/pica/plain) and the structure of [PICA JSON](http://format.gbv.de/pica/json)).
+This EcmaScript Module contains utility functions to process [PICA+ data](https://format.gbv.de/pica). The following serialization formats are supported:
 
-Annotated PICA Plain is supported by default. It can be enforced or disabled on parsing and on serializing by setting option `annotated` to `true` or `false`.
+* [PICA Plain](http://format.gbv.de/pica/plain) parsing and serialization (`format: "plain"`)
+* [Annotated PICA](http://format.gbv.de/pica/plain) parsing and serialization (`format: "annotated"`)
+* [Normalized PICA](http://format.gbv.de/pica/normalized) parsing (`format: "normalized"`)
+* [PICA JSON](http://format.gbv.de/pica/json) used internally
 
 ### Parsing
 
@@ -29,19 +32,25 @@ PICA in serialization formats [PICA Plain](https://format.gbv.de/pica/plain), [P
 ~~~js
 import { parseStream, parseAll } from "pica-data"
 
+// transform stream
 parseStream(process.stdin, { format: "plain" })
   .on("data", record => console.log(record))
   .on("error", ({message, line}) => console.error(`${message} on line ${line}`))
 
-parseAll(process.stdin, "plain")
+// promise stream to array
+parseAll(process.stdin, { format: "plain"})
   .then(records => console.log(records))
   .catch(e => console.error(`${e.message} on line ${e.line}`))
 ~~~
 
-In addition there are two legacy functions that both ignore parsing errors:
+The second argument can also be a plain format string (e.g. `parseAll(input, "plain")`).
+
+In addition there are two legacy functions that both ignore parsing errors and only support PICA Plain and Annotated PICA:
 
 * function `parsePica` to parse PICA Plain syntax into a PICA record
 * function `parsePicaLine` to parse a line of PICA Plain syntax into a PICA field
+
+Annotated PICA Plain can be enforced or disabled on parsing and on serializing by setting option `annotated` to `true` or `false`.
 
 ### Serializing
 

@@ -30,4 +30,9 @@ describe("parseAll", () => {
       }
     })
   })
+
+  it("accepts format given as plain string", async () => {
+    return expect(parseAll(Readable.from("~ 003@ $0123"), "annotated"))
+      .become([[["003@","","0","123","~"]]])
+  })
 })
