@@ -35,15 +35,13 @@ The following serialization formats are supported:
 
 ### Parsing
 
-Parsing from string:
+Parsing from string is supported by exported function `parsePica`. The serialization format is passed as second argument or as option. The function always returns an array of records. Parsing errors result in skipped records unless option `error` is enabled. 
 
 ~~~js
 import { parsePica } from "pica-data"
 
 const records = parsePica(input, { format: "plain" })
 ~~~
-
-The second argument can also be a format string (e.g. `parsePica(input, "plain")`).
 
 Parsing from readable streams is supported by parser functions `parseStream` (returns a stream of records) and `parseAll` (returns a promise resolving in an array of records).
 
@@ -61,17 +59,28 @@ parseAll(process.stdin, { format: "plain"})
   .catch(e => console.error(`${e.message} on line ${e.line}`))
 ~~~
 
-In addition there are two legacy functions that both ignore parsing errors and only support PICA Plain and Annotated PICA:
+In addition the function `parsePicaLine` can be used to parse a single line of PICA Plain (optionally annotated) into a PICA field.
 
-* function `parsePica` to parse PICA Plain syntax into a PICA record
-* function `parsePicaLine` to parse a line of PICA Plain syntax into a PICA field
+To process PICA/XML as returned via SRU use [xml2js](https://www.npmjs.com/package/xml2js) and transform records with exported function `fromXML`:
 
-Annotated PICA Plain can be enforced or disabled on parsing and on serializing by setting option `annotated` to `true` or `false`.
+~~~js
+import { fromXML, serializePica } from 'pica-data'
+import createClient from '@natlibfi/sru-client'
+
+createClient({
+  url:'https://sru.k10plus.de/opac-de-627', version: '1.1',
+  recordSchema: 'picaxml', recordFormat: 'object'
+}).searchRetrieve('pica.tit=Beowulf')
+  .on('record', record => {
+     const pica = fromXML(record)
+     console.log(serializePica(pica))
+  })
+~~~
 
 ### Serializing
 
-* function `serializePica` to serialize a PICA record in PICA Plain syntax
-* function `serializePicaField` to serialize a PICA field in PICA Plain syntax
+* function `serializePica` to serialize a PICA record in PICA Plain syntax (optionally annotated)
+* function `serializePicaField` to serialize a PICA field in PICA Plain syntax (optionally annotated)
 * function `picaFieldIdentifier` to generate a field identifier from a field or from an Avram field schedule
 
 ### Access

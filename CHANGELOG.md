@@ -2,10 +2,11 @@
 
 ## 0.7.0
 
-- Remove function 'isDbkey'
+- Remove function `isDbkey`
 - Support parsing PICA Patch Plain and Normalized
-- Change function 'parsePica' to return an array of records
-- Let 'serializePicaField' and 'serializePica' append a newline
+- Change function `parsePica` to return an array of records
+- Let `serializePicaField` and `serializePica` append a newline
+- Add function `fromXML`
 
 ## 0.6.0
 
