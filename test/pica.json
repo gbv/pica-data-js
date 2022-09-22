@@ -75,12 +75,12 @@
     }
   },
   {
-    "input": "+ 031N $d$e1$f",
+    "input": "~ 031N $d$e1$f",
     "format": "annotated",
     "description": "annotated PICA",
-    "result": [ [ [ "031N", "", "d", "", "e", "1", "f", "", "+" ] ] ],
+    "result": [ [ [ "031N", "", "d", "", "e", "1", "f", "", "~" ] ] ],
     "serialize": {
-      "annotated": "+ 031N $d$e1$f\n",
+      "annotated": "~ 031N $d$e1$f\n",
       "plain": "031N $d$e1$f\n"
     }
   },
@@ -107,6 +107,20 @@
     "format": "annotated",
     "error": {
       "message": "Missing occurrence on level 2", "line": 1, "column": 7
+    }
+  },
+  {
+    "input": "  003@ $0123\n+ 031N $d$e1$f",
+    "format": "patch-plain",
+    "description": "annotated PICA",
+    "result": [ [
+      [ "003@", "", "0", "123", " " ],
+      [ "031N", "", "d", "", "e", "1", "f", "", "+" ]
+    ] ],
+    "serialize": {
+      "annotated": "  003@ $0123\n+ 031N $d$e1$f\n",
+      "patch-plain": "  003@ $0123\n+ 031N $d$e1$f\n",
+      "plain": "003@ $0123\n031N $d$e1$f\n"
     }
   },
   {
