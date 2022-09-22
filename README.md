@@ -3,6 +3,8 @@
 [![Test and build](https://github.com/gbv/pica-data-js/workflows/Test/badge.svg)](https://github.com/gbv/pica-data-js/actions?query=workflow%3A%22Test%22)
 [![npm release](https://img.shields.io/npm/v/pica-data)](https://www.npmjs.com/package/pica-data)
 
+PICA+ record processing
+
 ## Table of Contents
 
 - [Install](#install)
@@ -12,18 +14,18 @@
 
 ## Install
 
-Install the module with `npm install pica-data`.
-
-Requires at least Node v16.
+`npm install pica-data` (requires Node >= v16)
 
 ## Usage
 
-This EcmaScript Module contains utility functions to process [PICA+ data](https://format.gbv.de/pica). The following serialization formats are supported:
+This EcmaScript Module contains utility functions to process [PICA+ data](https://format.gbv.de/pica).
+
+The following serialization formats are supported:
 
 * [PICA Plain](http://format.gbv.de/pica/plain) parsing and serialization (`format: "plain"`)
 * [Annotated PICA](http://format.gbv.de/pica/plain) parsing and serialization (`format: "annotated"`)
 * [Normalized PICA](http://format.gbv.de/pica/normalized) parsing (`format: "normalized"`)
-* [PICA JSON](http://format.gbv.de/pica/json) used internally
+* [PICA JSON](http://format.gbv.de/pica/json)
 
 ### Parsing
 
@@ -43,7 +45,7 @@ parseAll(process.stdin, { format: "plain"})
   .catch(e => console.error(`${e.message} on line ${e.line}`))
 ~~~
 
-The second argument can also be a plain format string (e.g. `parseAll(input, "plain")`).
+The second argument can also be a format string (e.g. `parseAll(input, "plain")`).
 
 In addition there are two legacy functions that both ignore parsing errors and only support PICA Plain and Annotated PICA:
 
