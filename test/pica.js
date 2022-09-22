@@ -6,8 +6,11 @@ describe("Parsing and serializing PICA Plain", () => {
   const parseTests = (tests, options) => {
     for (let pp in tests) {
       const pica = parsePica(pp, options)
-      assert.deepEqual(pica, tests[pp])
-      assert.equal(serializePica(pica), pp)
+      const result = tests[pp]
+      assert.deepEqual(pica, result)
+      if (result.length) {
+        assert.equal(serializePica(pica, options?.format || "plain"), pp)
+      }
     }
   }
 
@@ -44,6 +47,13 @@ describe("Parsing and serializing PICA Plain", () => {
 
     assert.deepEqual(serializePica([["123A","","x","y"," "]], { annotated: false }), "123A $xy")
     assert.deepEqual(serializePica([["123A","","x","y"]], { annotated: true }), "  123A $xy")
+  })
+
+  it("supports parsing and serializing annotated PICA Patch Plain", () => {
+    parseTests({
+      "+ 123A $xy": [["123A","","x","y","+"]],
+      "? 123A $xy": [],
+    },{ format: "patch-plain" })
   })
 })
 

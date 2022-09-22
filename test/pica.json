@@ -147,5 +147,23 @@
     "error": {
       "message": "PICA serialization 'x' is not supported"
     }
+  },
+  {
+    "input": "003@ \u001F0123\u001E\n001X+\u001Fa1\u001Fb\u001E234@/99-\u001Fx\u001Fy0\u001E",
+    "format": "patch-normalized",
+    "result": [
+      [ [ "003@", "", "0", "123", " " ] ],
+      [ ["001X", "", "a", "1", "b", "", "+" ],
+        ["234@", "99", "x", "", "y", "0", "-" ] ]
+    ]
+  },
+  {
+    "input": "003@?\u001F0123",
+    "format": "patch-normalized",
+    "error": {
+      "message": "Expected annotation character",
+      "line": 1,
+      "column": 5
+    }
   }
 ]

@@ -9,6 +9,10 @@ PICA+ record processing
 
 - [Install](#install)
 - [Usage](#usage)
+  - [Parsing](#parsing)
+  - [Serializing](#serializing)
+  - [Access](#access)
+  - [Validation](#validation)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -22,14 +26,26 @@ This EcmaScript Module contains utility functions to process [PICA+ data](https:
 
 The following serialization formats are supported:
 
-* [PICA Plain](http://format.gbv.de/pica/plain) parsing and serialization (`format: "plain"`)
-* [Annotated PICA](http://format.gbv.de/pica/plain) parsing and serialization (`format: "annotated"`)
-* [Normalized PICA](http://format.gbv.de/pica/normalized) parsing (`format: "normalized"`)
-* [PICA JSON](http://format.gbv.de/pica/json)
+- [PICA Plain](http://format.gbv.de/pica/plain) parsing and serialization (`plain`)
+- [Annotated PICA](http://format.gbv.de/pica/plain) parsing and serialization (`annotated`)
+- PICA Patch Plain (annotated PICA with annotation `+`, `-`, ` ` parsing (`patch-plain`)
+- [Normalized PICA](http://format.gbv.de/pica/normalized) parsing (`normalized`)
+- PICA Patch Normalized parsing (`patch-normalized`)
+- [PICA JSON](http://format.gbv.de/pica/json)
 
 ### Parsing
 
-PICA in serialization formats [PICA Plain](https://format.gbv.de/pica/plain), [PICA Normalized](https://format.gbv.de/pica/normalized) and [Annotated PICA](https://format.gbv.de/pica/plain) from readable streams is supported by parser functions `parseStream` (returns a stream of records) and `parseAll` (returns a promise resolving in an array of records).
+Parsing from string:
+
+~~~js
+import { parsePica } from "pica-data"
+
+const records = parsePica(input, { format: "plain" })
+~~~
+
+The second argument can also be a format string (e.g. `parsePica(input, "plain")`).
+
+Parsing from readable streams is supported by parser functions `parseStream` (returns a stream of records) and `parseAll` (returns a promise resolving in an array of records).
 
 ~~~js
 import { parseStream, parseAll } from "pica-data"
@@ -44,8 +60,6 @@ parseAll(process.stdin, { format: "plain"})
   .then(records => console.log(records))
   .catch(e => console.error(`${e.message} on line ${e.line}`))
 ~~~
-
-The second argument can also be a format string (e.g. `parseAll(input, "plain")`).
 
 In addition there are two legacy functions that both ignore parsing errors and only support PICA Plain and Annotated PICA:
 
