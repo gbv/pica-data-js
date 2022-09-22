@@ -1,5 +1,5 @@
 import assert from "assert"
-import { picaFieldSchedule, picaFieldScheduleIdentifier, serializePicaField, isDbkey, isPPN, ppnChecksum } from "../lib/pica.js"
+import { picaFieldSchedule, picaFieldScheduleIdentifier, serializePicaField, isPPN, ppnChecksum } from "../lib/pica.js"
 import { loadJSON } from "./utils.js"
 
 const schema = loadJSON("schema")
@@ -30,19 +30,6 @@ describe("picaFieldScheduleIdentifier", () => {
       assert.equal(picaFieldScheduleIdentifier(schema, field), id)
     })
   }
-})
-
-describe("isDbkey", () => {
-  it("detects invalid dbkey", () => {
-    for (let dbkey of [null, "", "a-", "-a","9"]) {
-      assert.ok(!isDbkey(dbkey))
-    }
-  })
-  it("detects valid dbkey", () => {
-    for (let dbkey of ["ab","a9-1", "ab-b1e-ef"]) {
-      assert.ok(isDbkey(dbkey))
-    }
-  })
 })
 
 describe("isPPN", () => {

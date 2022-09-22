@@ -3,50 +3,84 @@
 [![Test and build](https://github.com/gbv/pica-data-js/workflows/Test/badge.svg)](https://github.com/gbv/pica-data-js/actions?query=workflow%3A%22Test%22)
 [![npm release](https://img.shields.io/npm/v/pica-data)](https://www.npmjs.com/package/pica-data)
 
+PICA+ record processing
+
 ## Table of Contents
 
 - [Install](#install)
 - [Usage](#usage)
+  - [Parsing](#parsing)
+  - [Serializing](#serializing)
+  - [Access](#access)
+  - [Validation](#validation)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## Install
 
-Install the module with `npm install pica-data`.
-
-Requires at least Node v16.
+`npm install pica-data` (requires Node >= v16)
 
 ## Usage
 
-This EcmaScript Module contains utility functions to process [PICA+ data](https://format.gbv.de/pica) (in particular [PICA Plain](http://format.gbv.de/pica/plain) and the structure of [PICA JSON](http://format.gbv.de/pica/json)).
+This EcmaScript Module contains utility functions to process [PICA+ data](https://format.gbv.de/pica).
 
-Annotated PICA Plain is supported by default. It can be enforced or disabled on parsing and on serializing by setting option `annotated` to `true` or `false`.
+The following serialization formats are supported:
+
+- [PICA Plain](http://format.gbv.de/pica/plain) parsing and serialization (`plain`)
+- [Annotated PICA](http://format.gbv.de/pica/plain) parsing and serialization (`annotated`)
+- PICA Patch Plain (annotated PICA with annotation `+`, `-`, ` ` parsing (`patch-plain`)
+- [Normalized PICA](http://format.gbv.de/pica/normalized) parsing (`normalized`)
+- PICA Patch Normalized parsing (`patch-normalized`)
+- [PICA JSON](http://format.gbv.de/pica/json)
 
 ### Parsing
 
-PICA in serialization formats [PICA Plain](https://format.gbv.de/pica/plain), [PICA Normalized](https://format.gbv.de/pica/normalized) and [Annotated PICA](https://format.gbv.de/pica/plain) from readable streams is supported by parser functions `parseStream` (returns a stream of records) and `parseAll` (returns a promise resolving in an array of records).
+Parsing from string is supported by exported function `parsePica`. The serialization format is passed as second argument or as option. The function always returns an array of records. Parsing errors result in skipped records unless option `error` is enabled. 
+
+~~~js
+import { parsePica } from "pica-data"
+
+const records = parsePica(input, { format: "plain" })
+~~~
+
+Parsing from readable streams is supported by parser functions `parseStream` (returns a stream of records) and `parseAll` (returns a promise resolving in an array of records).
 
 ~~~js
 import { parseStream, parseAll } from "pica-data"
 
+// transform stream
 parseStream(process.stdin, { format: "plain" })
   .on("data", record => console.log(record))
   .on("error", ({message, line}) => console.error(`${message} on line ${line}`))
 
-parseAll(process.stdin, "plain")
+// promise stream to array
+parseAll(process.stdin, { format: "plain"})
   .then(records => console.log(records))
   .catch(e => console.error(`${e.message} on line ${e.line}`))
 ~~~
 
-In addition there are two legacy functions that both ignore parsing errors:
+In addition the function `parsePicaLine` can be used to parse a single line of PICA Plain (optionally annotated) into a PICA field.
 
-* function `parsePica` to parse PICA Plain syntax into a PICA record
-* function `parsePicaLine` to parse a line of PICA Plain syntax into a PICA field
+To process PICA/XML as returned via SRU use [xml2js](https://www.npmjs.com/package/xml2js) and transform records with exported function `fromXML`:
+
+~~~js
+import { fromXML, serializePica } from 'pica-data'
+import createClient from '@natlibfi/sru-client'
+
+createClient({
+  url:'https://sru.k10plus.de/opac-de-627', version: '1.1',
+  recordSchema: 'picaxml', recordFormat: 'object'
+}).searchRetrieve('pica.tit=Beowulf')
+  .on('record', record => {
+     const pica = fromXML(record)
+     console.log(serializePica(pica))
+  })
+~~~
 
 ### Serializing
 
-* function `serializePica` to serialize a PICA record in PICA Plain syntax
-* function `serializePicaField` to serialize a PICA field in PICA Plain syntax
+* function `serializePica` to serialize a PICA record in PICA Plain syntax (optionally annotated)
+* function `serializePicaField` to serialize a PICA field in PICA Plain syntax (optionally annotated)
 * function `picaFieldIdentifier` to generate a field identifier from a field or from an Avram field schedule
 
 ### Access
@@ -70,7 +104,6 @@ In addition there are two legacy functions that both ignore parsing errors:
 
 * function `picaFieldSchedule` to look up a field schedule for a given field in an Avram schema
 * function `picaFieldScheduleIdentifier` to look up the field identifier of a field in an Avram schema
-* function `isDbkey` to check whether a string looks like a database key
 * function `isPPN` to check whether a string looks like a valid PPN (including checksum)
 * function `ppnChecksum` to calculate the checksum of a PPN
 
