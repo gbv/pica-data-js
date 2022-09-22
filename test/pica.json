@@ -2,13 +2,19 @@
   {
     "input": "031N $d$e1$f",
     "format": "plain",
-    "result": [ [ [ "031N", "", "d", "", "e", "1", "f", "" ] ] ]
+    "result": [ [ [ "031N", "", "d", "", "e", "1", "f", "" ] ] ],
+    "serialize": {
+      "plain": "031N $d$e1$f\n"
+    }
   },
   {
     "input": "012X/00 $a",
     "format": "plain",
     "description": "normalize occurrence zero",
-    "result": [ [ ["012X", "", "a", ""] ] ]
+    "result": [ [ ["012X", "", "a", ""] ] ],
+    "serialize": {
+      "plain": "012X $a\n"
+    }
   },
   { 
     "input": "003@ $0123\n\n001X $a1\n234@/99 $b$$x$$$c0",
@@ -18,7 +24,10 @@
       [ [ "003@", "", "0", "123" ] ],
       [ ["001X", "", "a", "1" ],
         ["234@", "99", "b", "$x$", "c", "0" ] ]
-    ]
+    ],
+    "serialize": {
+      "plain": "003@ $0123\n\n001X $a1\n234@/99 $b$$x$$$c0\n"
+    }
   },
   {
     "input": "003/001 $a",
@@ -69,7 +78,11 @@
     "input": "+ 031N $d$e1$f",
     "format": "annotated",
     "description": "annotated PICA",
-    "result": [ [ [ "031N", "", "d", "", "e", "1", "f", "", "+" ] ] ]
+    "result": [ [ [ "031N", "", "d", "", "e", "1", "f", "", "+" ] ] ],
+    "serialize": {
+      "annotated": "+ 031N $d$e1$f\n",
+      "plain": "031N $d$e1$f\n"
+    }
   },
   {
     "input": "? 111A A",
@@ -106,12 +119,12 @@
     ]
   },
   {
-    "input": "003@ \u001F0123\u001E\n001X \u001Fa",
+    "input": "003@ \u001F0123",
     "format": "normalized",
     "error": { 
       "message": "Expected field separator",
-      "line": 2,
-      "column": 8 
+      "line": 1,
+      "column": 11 
     }
   },
   {

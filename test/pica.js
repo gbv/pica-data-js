@@ -1,67 +1,12 @@
 import assert from "assert"
-import { serializePica, serializePica3, parsePica, getPPN, picaFieldIdentifier } from "../lib/pica.js"
+import { serializePica3, parsePica, getPPN, picaFieldIdentifier } from "../lib/pica.js"
 import { loadJSON } from "./utils.js"
-
-describe("Parsing and serializing PICA Plain", () => {
-  const parseTests = (tests, options) => {
-    for (let pp in tests) {
-      const pica = parsePica(pp, options)
-      const result = tests[pp]
-      assert.deepEqual(pica, result)
-      if (result.length) {
-        assert.equal(serializePica(pica, options?.format || "plain"), pp)
-      }
-    }
-  }
-
-  it("parses and serializes", () => {
-    parseTests({
-      "031N $d$e1$f": [ [ "031N", "", "d", "", "e", "1", "f", "" ] ],
-      "003@ $0123": [ [ "003@", "", "0", "123" ] ],
-      "001X $a1\n234@/99 $b$$x$$$c0": [
-        ["001X", "", "a", "1" ],
-        ["234@", "99", "b", "$x$", "c", "0" ],
-      ],
-    })
-  })
-
-  it("normalized occurrence zero", () => {
-    assert.deepEqual(parsePica("012X/00 $a"), [["012X", "", "a", ""]])
-  })
-
-  it("does not support missing subfield codes", () => {
-    assert.deepEqual(parsePica("099X $ab$"), [])
-    assert.deepEqual(parsePica("099X $"), [])
-    assert.deepEqual(parsePica("099X"), [])
-  })
-    
-  it("supports parsing and serializing annotated PICA", () => {
-    parseTests({
-      "  123A $xy": [["123A","","x","y"," "]],
-      "? 123A $xy": [["123A","","x","y","?"]],
-    }, { annotated: true })
-    assert.equal(serializePica([["123A","","x","y",null]]), "  123A $xy")
-
-    assert.deepEqual(parsePica("  123A $xy", { annotated: false }), [])
-    assert.deepEqual(parsePica("123A $xy", { annotated: true }), [])
-
-    assert.deepEqual(serializePica([["123A","","x","y"," "]], { annotated: false }), "123A $xy")
-    assert.deepEqual(serializePica([["123A","","x","y"]], { annotated: true }), "  123A $xy")
-  })
-
-  it("supports parsing and serializing annotated PICA Patch Plain", () => {
-    parseTests({
-      "+ 123A $xy": [["123A","","x","y","+"]],
-      "? 123A $xy": [],
-    },{ format: "patch-plain" })
-  })
-})
 
 describe("Utility functions", () => {
   it("getPPN", () => {
-    assert.equal(getPPN(parsePica("003@ $0123")), "123")
-    assert.equal(getPPN(parsePica("003@ $0123$0456")), "123")
-    assert.equal(getPPN(parsePica("001X $a1\n234@/99 $b$$x$$$c0")), null)
+    assert.equal(getPPN(parsePica("003@ $0123")[0]), "123")
+    assert.equal(getPPN(parsePica("003@ $0123$0456")[0]), "123")
+    assert.equal(getPPN(parsePica("001X $a1\n234@/99 $b$$x$$$c0")[0]), null)
   }),
   it("picaFieldIdentifier", () => {
     assert.equal(picaFieldIdentifier(["123A","01"]), "123A/01")
@@ -78,9 +23,8 @@ describe("serialize Pica3", () => {
 
   pica3tests.forEach( ({ plain, pica3 }) => {
     it(plain + " →  " + pica3, () => {
-      const record = parsePica(plain)
+      const [record] = parsePica(plain)
       assert.equal(serializePica3(record, schema), pica3)
     })
   })
-
 })
