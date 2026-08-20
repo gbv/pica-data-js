@@ -1,4 +1,4 @@
-import chai from "chai"
+import * as chai from "chai"
 import chaiAsPromised from "chai-as-promised"
 chai.use(chaiAsPromised)
 const { expect } = chai
@@ -6,7 +6,7 @@ const { expect } = chai
 import fs from "fs"
 import path from "path"
 
-const __dirname = new URL(".", import.meta.url).pathname // eslint-disable-line no-undef
+const __dirname = new URL(".", import.meta.url).pathname  
 const tests = JSON.parse(fs.readFileSync(path.resolve(__dirname, "pica.json")))
 
 import { parsePica, serializePica, parseAll } from "../lib/pica.js"
@@ -41,7 +41,9 @@ describe("parseAll", () => {
       const parsed = parseAll(Readable.from(input), { format })
       if (error) {
         return parsed 
-          .then(() => { throw new Error("expected error") })
+          .then(() => {
+            throw new Error("expected error") 
+          })
           .catch(e => {
             expect({ message: e.message, ...e }).deep.equal(error) 
           })
