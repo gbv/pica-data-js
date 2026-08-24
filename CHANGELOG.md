@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.0
+
+- Support parsing PICA Import format
+
 ## 0.7.0
 
 - Remove function `isDbkey`

@@ -30,6 +30,7 @@ The following serialization formats are supported:
 - [Annotated PICA](http://format.gbv.de/pica/plain) parsing and serialization (`annotated`)
 - PICA Patch Plain (annotated PICA with annotation `+`, `-`, ` ` parsing (`patch-plain`)
 - [Normalized PICA](http://format.gbv.de/pica/normalized) parsing (`normalized`)
+- [PICA Import](http://format.gbv.de/pica/import) parsing (`import`)
 - PICA Patch Normalized parsing (`patch-normalized`)
 - [PICA JSON](http://format.gbv.de/pica/json)
 

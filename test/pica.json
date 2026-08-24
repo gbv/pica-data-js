@@ -192,5 +192,31 @@
       "line": 1,
       "column": 5
     }
+  },
+  {
+    "input": "# Kommentar\n\u001D\n003@",
+    "format": "import",
+    "error": {
+      "message": "Field must start with byte code 1E",
+      "column": 1,
+      "line": 3
+    }
+  },
+  {
+    "input": "\u001D\n\u001E003@\u001E",
+    "format": "import",
+    "error": {
+      "message": "Field must not contain byte code 1E",
+      "column": 6,
+      "line": 2
+    }
+  },
+  {
+    "input": "\u001D\n\u001E003@ \u001F0123\n\u001E001X \u001Fa1\u001Fb?\n",
+    "format": "import",
+    "result": [ 
+      [ [ "003@", "", "0", "123" ],
+        [ "001X", "", "a", "1", "b", "?" ] ]
+    ]
   }
 ]
